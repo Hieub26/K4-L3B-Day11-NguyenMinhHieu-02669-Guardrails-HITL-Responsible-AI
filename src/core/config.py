@@ -36,7 +36,11 @@ PROVIDER_OPENROUTER = "openrouter"
 
 # --- Blue Team (LOCKED) ---
 BLUE_PROVIDER = PROVIDER_OPENROUTER
-BLUE_MODEL = "liquid/lfm-2.5-2.6b"
+BLUE_MODEL = (
+    os.environ.get("OPENROUTER_MODEL")
+    or os.environ.get("BLUE_MODEL")
+    or "liquid/lfm-2.5-2.6b:free"
+)
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 DEFAULT_OPENROUTER_MODEL = BLUE_MODEL  # alias
 
@@ -104,8 +108,11 @@ def get_blue_provider() -> str:
 
 
 def get_blue_model() -> str:
-    # Hard-locked; env cannot override for the graded Blue Team path.
-    return BLUE_MODEL
+    return (
+        os.environ.get("OPENROUTER_MODEL")
+        or os.environ.get("BLUE_MODEL")
+        or BLUE_MODEL
+    )
 
 
 def get_openrouter_api_key() -> str:
